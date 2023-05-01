@@ -1,0 +1,68 @@
+doctype html
+head
+  title Copisteria Julian
+  meta(charset='utf-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1')
+  link(rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css')
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+  script(defer src="/javascripts/main.js")
+  script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
+  style.
+    .tinta {
+    width: 50px;
+    height: 50px;
+    float: left;
+    padding: 5px;
+    }
+    .row{
+      margin-left: 10px;
+    }
+.container
+  .row
+    h3 Hojas:0
+    p Introduce la impresora y el texto a imprimir
+    form.form-inline(action='index.php' method='get' role='form')
+      | Impresora: 
+      select.form-control#printerDropdown(name='n_impresora')
+        option(value='0') Impresora0
+        option(value='1') Impresora1
+        option(value='2') Impresora2
+  textarea.form-control#queueTextArea(rows='4' name='texto')
+  input#buttonSendTextPrinter(type='submit' value='Enviar a impresora')
+.row
+  .col-sm-4#printer0
+    .row
+      a#0(href='#')
+        img(src='/images/A2.jpg' alt='Procesa cola')
+    .row
+      .toner
+        .tinta(style='background-color:black')
+        .tinta(style='background-color:yellow')
+        .tinta(style='background-color:cyan')
+        .tinta(style='background-color:magenta')
+    .row
+      ul.list-group
+  .col-sm-4#printer1
+    .row
+      a#1(href='#')
+        img(src='/images/A3.jpg' alt='Procesa cola')
+    .row
+      .toner
+        .tinta(style='background-color:black')
+        .tinta(style='background-color:yellow')
+        .tinta(style='background-color:cyan')
+        .tinta(style='background-color:magenta')
+    .row
+      ul.list-group
+  .col-sm-4#printer2
+    .row
+      a#2(href='#')
+        img(src='/images/A4.jpg' alt='Procesa cola')
+    .row
+      .toner
+        .tinta(style='background-color:black')
+        .tinta(style='background-color:yellow')
+        .tinta(style='background-color:cyan')
+        .tinta(style='background-color:magenta')
+    .row
+      ul.list-group

@@ -4,8 +4,9 @@ const impresora2 = document.getElementById('2')
 const queueTextArea = document.getElementById('queueTextArea')
 const buttonSendTextPrinter = document.getElementById('buttonSendTextPrinter')
 const printerDropdown = document.getElementById('printerDropdown')
+let queueValue = '0'
 const colorInk = 0.2
-const blackInk = 1.2
+const blackInk = 0.8
 let printerSelected = '0'
 let textValue = 0
 const getPrinters = () => {
@@ -21,7 +22,7 @@ const getPrinters = () => {
 }
 
 const putPrinterInk = data => {
-  console.log(data);
+  console.log(data)
   try {
     fetch(`/printers/${data.id}`, {
       method: 'PUT',
@@ -31,6 +32,8 @@ const putPrinterInk = data => {
       body: JSON.stringify(data)
     }).then(() => {
       sessionStorage.setItem(`printer${data.id}`, JSON.stringify(data))
+      updateInkPrinters()
+      clearPrintQueue(data.id)
     })
   } catch (error) {
     console.error(error)
@@ -56,17 +59,12 @@ const addTextQueue = text => {
 
 const getTextPrint = () => {
   const queueTextArea = document.getElementById('queueTextArea')
+  console.log(queueTextArea.value)
   return queueTextArea.value
 }
 
-const calculateText = () => {
-  let textValue = getTextPrint()
-  console.log(textValue.length);
-  return textValue.length
-}
-
 buttonSendTextPrinter.addEventListener('click', e => {
-  let queueValue = getTextPrint()
+  queueValue = getTextPrint()
   addTextQueue(queueValue)
 })
 
@@ -74,11 +72,11 @@ printerDropdown.addEventListener('input', e => {
   printerSelected = e.currentTarget.value
 })
 const consumeInks = idPrinter => {
-  let textValue = calculateText()
-  console.log(textValue);
   getPrinters().then(printer => {
-    console.log(printer)
-    console.log(printer[idPrinter].negro - blackInk * textValue);
+    let textValue = queueValue.length
+    console.log(textValue)
+    // console.log(printer)
+    // console.log(printer[idPrinter].negro - blackInk * textValue)
     let newBlackInk = printer[idPrinter].negro - blackInk * textValue
     let newYellowInk = printer[idPrinter].amarillo - colorInk * textValue
     let newCianInk = printer[idPrinter].cian - colorInk * textValue
@@ -91,7 +89,6 @@ const consumeInks = idPrinter => {
       cian: newCianInk,
       magenta: newMagentaInk
     }
-    console.log(data)
     putPrinterInk(data)
   })
 }
@@ -113,7 +110,7 @@ impresora2.addEventListener('click', e => {
 
 const updateInkPrinters = () => {
   let toner = document.querySelectorAll(`.toner`)
-  getPrinters().then(data =>
+  getPrinters().then(data => {
     data.forEach((printer, i) => {
       let actualToner = toner[i].children
       actualToner[0].innerHTML = `${printer.negro}%`
@@ -121,7 +118,14 @@ const updateInkPrinters = () => {
       actualToner[2].innerHTML = `${printer.cian}%`
       actualToner[3].innerHTML = `${printer.magenta}%`
     })
+  })
+}
+
+const clearPrintQueue = id => {
+  let printerQueue = document.querySelectorAll(
+    `.row .list-group`
   )
+  printerQueue[id].innerHTML = ''
 }
 
 window.onload = () => {
